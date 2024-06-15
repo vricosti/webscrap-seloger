@@ -1,22 +1,21 @@
-import sys
 import time
 import random
-from pathlib import Path
-curdir = Path(__file__).resolve().parent
-module_path = curdir / 'undetected-chromedriver'
-sys.path.insert(0, str(module_path))
-print(sys.path)
-
 # from selenium_profiles.webdriver import Chrome
 # from selenium_profiles.profiles import profiles
 # from seleniumwire import webdriver
-from selenium import webdriver
+# from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.common.keys import Keys
 # from selenium_stealth import stealth
-import undetected_chromedriver as uc
+
+# from pathlib import Path
+# curdir = Path(__file__).resolve().parent
+# module_path = curdir / 'undetected-chromedriver'
+# sys.path.insert(0, str(module_path))
+# print(sys.path)
+# import undetected_chromedriver as uc
 
 useragents = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -46,11 +45,7 @@ options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option("useAutomationExtension", False)
 
-
 # options.add_argument("start-maximized")
-# options.add_experimental_option("excludeSwitches", ["enable-automation"])
-# options.add_experimental_option('useAutomationExtension', False)
-
 # options.add_argument("--headless")  # Ensure GUI is off
 # options.add_argument("--no-sandbox")
 # options.add_argument("--disable-dev-shm-usage")
@@ -58,9 +53,9 @@ options.add_experimental_option("useAutomationExtension", False)
 # options.add_experimental_option("detach", True)
 # options.add_experimental_option("detach", True)
 # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
-# driver = webdriver.Chrome(service=webdriver_service, options=options)
+driver = webdriver.Chrome(service=webdriver_service, options=options)
 # driver = webdriver.Edge(service=webdriver_service)
-driver = uc.Chrome(headless=False, use_subprocess=False, options=options)
+# driver = uc.Chrome(headless=False, use_subprocess=True, options=options)
 
 # stealth(driver,
 #         user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
