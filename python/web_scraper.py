@@ -1,15 +1,22 @@
-from selenium_profiles.webdriver import Chrome
-from selenium_profiles.profiles import profiles
-from seleniumwire import webdriver
-# from selenium import webdriver
+import sys
+import time
+import random
+from pathlib import Path
+curdir = Path(__file__).resolve().parent
+module_path = curdir / 'undetected-chromedriver'
+sys.path.insert(0, str(module_path))
+print(sys.path)
+
+# from selenium_profiles.webdriver import Chrome
+# from selenium_profiles.profiles import profiles
+# from seleniumwire import webdriver
+from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-from selenium_stealth import stealth
-#import undetected_chromedriver as uc
-import time
-import random
+# from selenium_stealth import stealth
+import undetected_chromedriver as uc
 
 useragents = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -32,17 +39,12 @@ useragents = [
 webdriver_service = Service('C:/Apps/selenium/chromedriver-win64/chromedriver.exe')
 # webdriver_service = Service('C:/Apps/selenium/msedgedriver/msedgedriver.exe')
 
-profile = profiles.Windows()
+# profile = profiles.Windows()
 options = webdriver.ChromeOptions()
 # Adding argument to disable the AutomationControlled flag
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option("useAutomationExtension", False)
-
-
-# options.add_argument("--headless=new")
-# driver = uc.Chrome(profile, options=options,
-#                uc_driver=False)
 
 
 # options.add_argument("start-maximized")
@@ -56,19 +58,19 @@ options.add_experimental_option("useAutomationExtension", False)
 # options.add_experimental_option("detach", True)
 # options.add_experimental_option("detach", True)
 # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
-driver = webdriver.Chrome(service=webdriver_service, options=options)
+# driver = webdriver.Chrome(service=webdriver_service, options=options)
 # driver = webdriver.Edge(service=webdriver_service)
-# driver = uc.Chrome(headless=False, use_subprocess=False)
+driver = uc.Chrome(headless=False, use_subprocess=False, options=options)
 
-stealth(driver,
-        user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
-        languages=["fr-FR", "fr"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True,
-        )
+# stealth(driver,
+#         user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
+#         languages=["fr-FR", "fr"],
+#         vendor="Google Inc.",
+#         platform="Win32",
+#         webgl_vendor="Intel Inc.",
+#         renderer="Intel Iris OpenGL Engine",
+#         fix_hairline=True,
+#         )
 
 # webdriver_service = Service('C:/Apps/chromedriver-win64')  # Change this to your chromedriver path
 # driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
@@ -88,7 +90,7 @@ def scrape_titles(url):
         # search = driver.find_element("name", "q")
         # search.send_keys("google search through python")
         # search.send_keys(Keys.RETURN)  # hit return after you enter search text
-        time.sleep(50)  # sleep for 5 seconds so you can see the results
+        time.sleep(300)  # sleep for 5 seconds so you can see the results
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:

@@ -1,7 +1,5 @@
 requests
 beautifulsoup4
 selenium
-selenium-stealth
-selenium-profiles
-blinker<1.8.0
-undetected-chromedriver
+websockets
+
