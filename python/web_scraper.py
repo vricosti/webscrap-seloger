@@ -93,7 +93,7 @@ def scrape_titles(url):
 
 
 if __name__ == "__main__":
-    scrape_titles(URL)
+    scrape_titles('https://httpbin.io/headers')
 
 
 # import requests
@@ -115,16 +115,4 @@ if __name__ == "__main__":
 # }
 
 
-# def scrape_titles(url):
-#     session = requests.Session()
-#     response = session.get(url, headers=HEADERS)
-#     if response.status_code == 200:
-#         soup = BeautifulSoup(response.content, 'html.parser')
-#         titles = soup.find_all('h2')
-#         for title in titles:
-#             print(title.get_text())
-#     else:
-#             print(f"Failed to retrieve the page. Status code: {response.status_code}")
 
-# if __name__ == "__main__":
-#     scrape_titles(URL)
