@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.service import Service
 # from selenium.webdriver.common.by import By
 # from selenium.webdriver.chrome.options import Options
 # from selenium.webdriver.common.keys import Keys
-from selenium_stealth import stealth
+# from selenium_stealth import stealth
 
 # from pathlib import Path
 # curdir = Path(__file__).resolve().parent
@@ -16,11 +16,11 @@ from selenium_stealth import stealth
 # print(sys.path)
 # import undetected_chromedriver as uc
 
-useragents = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36", 
-]
+# useragents = [
+#     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+#     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+#     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36", 
+# ]
 
 
 def interceptor(request):
@@ -31,7 +31,7 @@ def interceptor(request):
     del request.headers["Sec-Ch-Ua-Platform"]
 
     # add the missing headers
-    request.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    request.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
     request.headers["Accept-Language"] = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5,tr;q=0.4,es;q=0.3,it;q=0.2"
     request.headers["Sec-Ch-Ua"] = "\"Not/A)Brand\";v=\"8\", \"Chromium\";v=\"126\", \"Google Chrome\";v=\"126\""
     request.headers["Sec-Ch-Ua-Mobile"] = "?0"
@@ -53,6 +53,8 @@ def interceptor(request):
 
 webdriver_service = Service('C:/Apps/selenium/chromedriver-win64/chromedriver.exe')
 # webdriver_service = Service('C:/Apps/selenium/msedgedriver/msedgedriver.exe')
+# webdriver_service = Service(executable_path="C:/Apps/selenium/geckodriver/geckodriver.exe")
+
 
 # profile = profiles.Windows()
 options = webdriver.ChromeOptions()
@@ -60,6 +62,12 @@ options = webdriver.ChromeOptions()
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option("useAutomationExtension", False)
+
+# selenium-wire options
+seleniumwire_options = {
+    'disable_capture': True  # Don't intercept/store any requests.
+}
+
 
 # options.add_argument("start-maximized")
 # options.add_argument("--headless")  # Ensure GUI is off
@@ -69,9 +77,14 @@ options.add_experimental_option("useAutomationExtension", False)
 # options.add_experimental_option("detach", True)
 # options.add_experimental_option("detach", True)
 # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
-driver = webdriver.Chrome(service=webdriver_service, options=options)
+driver = webdriver.Chrome(
+    service=webdriver_service,
+    options=options,
+    seleniumwire_options=seleniumwire_options)
+
 # driver = webdriver.Edge(service=webdriver_service)
 # driver = uc.Chrome(headless=False, use_subprocess=True, options=options)
+# driver = webdriver.Firefox()
 
 driver.request_interceptor = interceptor
 
