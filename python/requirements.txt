@@ -3,3 +3,5 @@ beautifulsoup4
 websockets
 selenium
 selenium-stealth
+selenium-wire
+
