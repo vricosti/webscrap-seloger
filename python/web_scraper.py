@@ -1,38 +1,99 @@
-from selenium import webdriver
+from selenium_profiles.webdriver import Chrome
+from selenium_profiles.profiles import profiles
+from seleniumwire import webdriver
+# from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+from selenium_stealth import stealth
+#import undetected_chromedriver as uc
 import time
+import random
+
+useragents = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36", 
+]
 
 # Configure Chrome options
-chrome_options = Options()
-chrome_options.add_argument("--headless")  # Ensure GUI is off
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
+# options = webdriver.ChromeOptions()
+# options.add_argument("start-maximized")
+# options.add_experimental_option("excludeSwitches", ["enable-automation"])
+# options.add_experimental_option('useAutomationExtension', False)
+
+# chrome_options = Options()
+# chrome_options.add_argument("--headless")  # Ensure GUI is off
+# chrome_options.add_argument("--no-sandbox")
+# chrome_options.add_argument("--disable-dev-shm-usage")
 
 
-webdriver_service = Service()
+webdriver_service = Service('C:/Apps/selenium/chromedriver-win64/chromedriver.exe')
+# webdriver_service = Service('C:/Apps/selenium/msedgedriver/msedgedriver.exe')
+
+profile = profiles.Windows()
 options = webdriver.ChromeOptions()
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
-driver = webdriver.Chrome(service=webdriver_service, options=options)
+# Adding argument to disable the AutomationControlled flag
+options.add_argument("--disable-blink-features=AutomationControlled")
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option("useAutomationExtension", False)
 
-#webdriver_service = Service('C:/Apps/chromedriver-win64')  # Change this to your chromedriver path
-#driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
+
+# options.add_argument("--headless=new")
+# driver = uc.Chrome(profile, options=options,
+#                uc_driver=False)
+
+
+# options.add_argument("start-maximized")
+# options.add_experimental_option("excludeSwitches", ["enable-automation"])
+# options.add_experimental_option('useAutomationExtension', False)
+
+# options.add_argument("--headless")  # Ensure GUI is off
+# options.add_argument("--no-sandbox")
+# options.add_argument("--disable-dev-shm-usage")
+# options.add_argument("--disable-gpu")
+# options.add_experimental_option("detach", True)
+# options.add_experimental_option("detach", True)
+# options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
+driver = webdriver.Chrome(service=webdriver_service, options=options)
+# driver = webdriver.Edge(service=webdriver_service)
+# driver = uc.Chrome(headless=False, use_subprocess=False)
+
+stealth(driver,
+        user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
+        languages=["fr-FR", "fr"],
+        vendor="Google Inc.",
+        platform="Win32",
+        webgl_vendor="Intel Inc.",
+        renderer="Intel Iris OpenGL Engine",
+        fix_hairline=True,
+        )
+
+# webdriver_service = Service('C:/Apps/chromedriver-win64')  # Change this to your chromedriver path
+# driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
 
 # Target URL
 URL = "https://www.seloger.com/list.htm?projects=1&types=2,1&places=[{%22inseeCodes%22:[920032]}]&price=600/900&sort=d_px&mandatorycommodities=0&enterprise=0&qsVersion=1.0&m=search_hp_last"
+# URL = "https://www.google.com"
+
 
 def scrape_titles(url):
     try:
+        rnd_idx = random.randint(0, len(useragents) - 1)
+        driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": useragents[rnd_idx]})
+        print(driver.execute_script("return navigator.userAgent;"))
         driver.get(url)
-        time.sleep(5)  # Wait for the page to fully load
-        titles = driver.find_elements(By.TAG_NAME, 'h2')
-        for title in titles:
-            print(title.text)
+        # time.sleep(5)  # Wait for the page to fully load
+        # search = driver.find_element("name", "q")
+        # search.send_keys("google search through python")
+        # search.send_keys(Keys.RETURN)  # hit return after you enter search text
+        time.sleep(50)  # sleep for 5 seconds so you can see the results
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
         driver.quit()
+
 
 if __name__ == "__main__":
     scrape_titles(URL)
