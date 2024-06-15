@@ -1,14 +1,13 @@
 import time
-import random
 # from selenium_profiles.webdriver import Chrome
 # from selenium_profiles.profiles import profiles
-# from seleniumwire import webdriver
-from selenium import webdriver
+from seleniumwire import webdriver
+# from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 # from selenium.webdriver.common.by import By
 # from selenium.webdriver.chrome.options import Options
 # from selenium.webdriver.common.keys import Keys
-# from selenium_stealth import stealth
+from selenium_stealth import stealth
 
 # from pathlib import Path
 # curdir = Path(__file__).resolve().parent
@@ -18,10 +17,27 @@ from selenium.webdriver.chrome.service import Service
 # import undetected_chromedriver as uc
 
 useragents = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36", 
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36", 
 ]
+
+
+def interceptor(request):
+    del request.headers["User-Agent"]
+    del request.headers["Accept-Language"]
+    del request.headers["Sec-Ch-Ua"]
+    del request.headers["Sec-Ch-Ua-Mobile"]
+    del request.headers["Sec-Ch-Ua-Platform"]
+
+    # add the missing headers
+    request.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    request.headers["Accept-Language"] = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5,tr;q=0.4,es;q=0.3,it;q=0.2"
+    request.headers["Sec-Ch-Ua"] = "\"Not/A)Brand\";v=\"8\", \"Chromium\";v=\"126\", \"Google Chrome\";v=\"126\""
+    request.headers["Sec-Ch-Ua-Mobile"] = "?0"
+    request.headers["Sec-Ch-Ua-Platform"] = "\"Windows\""
+    request.headers["Dnt"] = "1"
+
 
 # Configure Chrome options
 # options = webdriver.ChromeOptions()
@@ -57,6 +73,8 @@ driver = webdriver.Chrome(service=webdriver_service, options=options)
 # driver = webdriver.Edge(service=webdriver_service)
 # driver = uc.Chrome(headless=False, use_subprocess=True, options=options)
 
+driver.request_interceptor = interceptor
+
 # stealth(driver,
 #         user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
 #         languages=["fr-FR", "fr"],
@@ -77,9 +95,9 @@ URL = "https://www.seloger.com/list.htm?projects=1&types=2,1&places=[{%22inseeCo
 
 def scrape_titles(url):
     try:
-        rnd_idx = random.randint(0, len(useragents) - 1)
-        driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": useragents[rnd_idx]})
-        print(driver.execute_script("return navigator.userAgent;"))
+        # rnd_idx = random.randint(0, len(useragents) - 1)
+        # driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": useragents[rnd_idx]})
+        # print(driver.execute_script("return navigator.userAgent;"))
         driver.get(url)
         # time.sleep(5)  # Wait for the page to fully load
         # search = driver.find_element("name", "q")
@@ -93,7 +111,8 @@ def scrape_titles(url):
 
 
 if __name__ == "__main__":
-    scrape_titles('https://httpbin.io/headers')
+    scrape_titles(URL)
+    # scrape_titles('https://httpbin.io/headers')
 
 
 # import requests
@@ -113,6 +132,3 @@ if __name__ == "__main__":
 #     "Referer": "https://www.seloger.com/",
 #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
 # }
-
-
-
